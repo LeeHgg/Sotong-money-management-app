@@ -1,4 +1,4 @@
-# sotong
+# sotong app project
 
 A new Flutter project.
 
