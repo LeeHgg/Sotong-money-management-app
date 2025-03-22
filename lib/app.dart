@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:google_fonts/google_fonts.dart';
-import 'home.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'login.dart';
 import 'signup.dart';
+import 'home.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -50,6 +50,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 3초 뒤 로그인 페이지로 전환
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Timer(const Duration(seconds: 3), () {
         Navigator.of(context).pushReplacement(_createRoute());
@@ -57,23 +58,23 @@ class SplashScreen extends StatelessWidget {
     });
 
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-            child: Center(
-                child: Text(
-                  'Sotong',
-                  style: GoogleFonts.jomhuria(
-                    fontSize: 90,
-                    color: Color(0xFFF46A6A),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ))));
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Center(
+          child: SvgPicture.asset(
+            'sotong_svg/sotong logo.svg',
+            width: 200,
+            height: 200,
+          ),
+        ),
+      ),
+    );
   }
 }
 
 Route _createRoute() {
   return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
+    pageBuilder: (context, animation, secondaryAnimation) => LoginPage(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(1.0, 0.0);
       const end = Offset.zero;

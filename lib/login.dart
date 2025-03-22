@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -12,11 +11,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  // Firebase 인스턴스
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  // 로그인 함수
   Future<void> _login() async {
     try {
       final user = await _auth.signInWithEmailAndPassword(
@@ -90,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Center(
                 child: Text(
                   'TeamSync',
-                  style: GoogleFonts.jomhuria(
+                  style: TextStyle(
                     fontSize: 90,
                     color: Colors.white,
                     fontWeight: FontWeight.w500,

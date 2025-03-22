@@ -10,114 +10,227 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-  final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-  final _nameController = TextEditingController();
-  final _departmentController = TextEditingController();
-  final _yearController = TextEditingController();
-  final _facultyController = TextEditingController();
-
-  Future<void> _signup() async {
-    if (_passwordController.text == _confirmPasswordController.text) {
-      try {
-        final userCredential = await _auth.createUserWithEmailAndPassword(
-          email: _emailController.text,
-          password: _passwordController.text,
-        );
-
-        if (userCredential.user != null) {
-          await _firestore
-              .collection('users')
-              .doc(userCredential.user!.uid)
-              .set({
-            'name': _nameController.text,
-            'department': _departmentController.text,
-            'year': _yearController.text,
-            'faculty': _facultyController.text,
-            'email': _emailController.text,
-            'profileImageUrl': null,
-          });
-
-          Navigator.of(context).pushReplacementNamed('/');
-        }
-      } catch (e) {
-        print(e);
-      }
-    } else {
-      print('Passwords do not match');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Sign Up')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: '이름',
+      body: Column(
+        children: [
+          Container(
+            width: 393,
+            height: 852,
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(color: Colors.white),
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 46,
+                  top: 129,
+                  child: Text(
+                    '이메일을 입력하세요',
+                    style: TextStyle(
+                      color: const Color(0xFF231F1F),
+                      fontSize: 28,
+                      fontFamily: 'Pretendard Variable',
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -2,
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _facultyController,
-                decoration: const InputDecoration(
-                  labelText: '소속',
+                Positioned(
+                  left: 9,
+                  top: 0,
+                  child: Container(
+                    width: 375,
+                    height: 44,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(),
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          left: 0,
+                          top: 0,
+                          child: Container(width: 375, height: 30, child: Stack()),
+                        ),
+                        Positioned(
+                          left: 292,
+                          top: 16,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            spacing: 4,
+                            children: [
+                              Container(width: 20, height: 14, child: Stack()),
+                              Container(width: 16, height: 14, child: Stack()),
+                              Container(
+                                width: 25,
+                                height: 14,
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      left: 2,
+                                      top: 3,
+                                      child: Container(
+                                        width: 19,
+                                        height: 8,
+                                        decoration: ShapeDecoration(
+                                          color: Colors.black,
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1)),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          left: 298,
+                          top: 8,
+                          child: Container(width: 6, height: 6, child: Stack()),
+                        ),
+                        Positioned(
+                          left: 21,
+                          top: 12,
+                          child: Container(
+                            width: 54,
+                            height: 21,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: ShapeDecoration(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  left: 11,
+                                  top: 3,
+                                  child: Container(width: 33, height: 15, child: Stack()),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _departmentController,
-                decoration: const InputDecoration(
-                  labelText: '학부',
+                Positioned(
+                  left: 46,
+                  top: 200,
+                  child: Container(
+                    width: 294,
+                    height: 57,
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFFEDF4FF),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          left: 25,
+                          top: 17,
+                          child: SizedBox(
+                            width: 243,
+                            child: Text(
+                              'sotongofficial@naver.com',
+                              style: TextStyle(
+                                color: const Color(0xFF231F1F),
+                                fontSize: 17,
+                                fontFamily: 'Pretendard Variable',
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: -1,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _yearController,
-                decoration: const InputDecoration(
-                  labelText: '학년',
+                Positioned(
+                  left: 9,
+                  top: 818,
+                  child: Container(
+                    width: 375,
+                    height: 34,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(),
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          left: 120,
+                          top: 21,
+                          child: Container(
+                            width: 134,
+                            height: 5,
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  left: 0,
+                                  top: 0,
+                                  child: Container(
+                                    width: 134,
+                                    height: 5,
+                                    decoration: ShapeDecoration(
+                                      color: Colors.black,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: '이메일',
+                Positioned(
+                  left: 46,
+                  top: 728,
+                  child: Container(
+                    width: 294,
+                    height: 50,
+                    padding: const EdgeInsets.symmetric(horizontal: 81, vertical: 13),
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFF0062FF),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      spacing: 10,
+                      children: [
+                        Text(
+                          '다음',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontFamily: 'Pretendard Variable',
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: -1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: '비밀번호',
-                ),
-                obscureText: true,
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _confirmPasswordController,
-                decoration: const InputDecoration(
-                  labelText: '비밀번호 확인',
-                ),
-                obscureText: true,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _signup,
-                child: Text('Sign Up'),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
