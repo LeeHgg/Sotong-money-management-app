@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'login.dart';
+import 'login_email.dart';
 import 'signup.dart';
 import 'home.dart';
 
@@ -20,6 +21,8 @@ class MyApp extends StatelessWidget {
                 builder: (context) => const SplashScreen());
           case '/login':
             return MaterialPageRoute(builder: (context) => const LoginPage());
+          case '/email_login':
+            return MaterialPageRoute(builder: (context) => const EmailLoginPage());
           case '/signup':
             return MaterialPageRoute(builder: (context) => const SignupPage());
           case '/':

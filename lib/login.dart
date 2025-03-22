@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -11,176 +8,107 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
-  // Firebase 인스턴스
-  final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  // 로그인 함수
-  Future<void> _login() async {
-    try {
-      final user = await _auth.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-      if (user != null) {
-        Navigator.of(context).pushReplacementNamed('/');
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> _googleSignIn() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-
-    if (googleUser != null) {
-      final GoogleSignInAuthentication googleAuth =
-      await googleUser.authentication;
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      try {
-        final UserCredential userCredential =
-        await _auth.signInWithCredential(credential);
-        final User? user = userCredential.user;
-        if (user != null) {
-          // Firestore에 사용자 정보가 있는지 확인하고 없으면 등록
-          final userDoc =
-          await _firestore.collection('users').doc(user.uid).get();
-          if (!userDoc.exists) {
-            await _firestore.collection('users').doc(user.uid).set({
-              'name': user.displayName ?? '',
-              'email': user.email ?? '',
-              'profileImageUrl': user.photoURL ?? '',
-              'department': '',
-              'year': '',
-              'faculty': '',
-            });
-          }
-          Navigator.of(context).pushReplacementNamed('/');
-        }
-      } catch (e) {
-        print(e);
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFFF46A6A), Color(0xFFFFC1C1)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: FractionallySizedBox(
-              heightFactor: 0.6,
-              child: Center(
-                child: Text(
-                  'TeamSync',
-                  style: TextStyle(
-                    fontSize: 90,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.5,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0),
-                ),
-              ),
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          Positioned(
+            top: 90,
+            left: 46,
+            child: RichText(
+              text: const TextSpan(
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800),
                 children: [
-                  Text(
-                    'Sign in',
-                    style: TextStyle(
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                    ),
-                    obscureText: true,
-                  ),
-                  Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: _googleSignIn,
-                        icon: Icon(Icons.login),
-                        label: Text('Sign in with Google'),
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Color(0xFFF46A6A),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed('/signup');
-                        },
-                        child: Text(
-                          'Sign up',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
+                  TextSpan(text: '재미있게 ', style: TextStyle(color: Color(0xFF231F1F))),
+                  TextSpan(text: '소통', style: TextStyle(color: Color(0xFF0062FF))),
+                  TextSpan(text: '하며\n', style: TextStyle(color: Color(0xFF231F1F))),
+                  TextSpan(text: '소비 통제', style: TextStyle(color: Color(0xFF0062FF))),
+                  TextSpan(text: ' 하자!', style: TextStyle(color: Color(0xFF231F1F))),
                 ],
               ),
             ),
           ),
           Positioned(
-            right: 50,
-            bottom: MediaQuery.of(context).size.height * 0.5 - 30,
-            child: FloatingActionButton(
-              onPressed: _login,
-              backgroundColor: Colors.white,
-              child: Icon(Icons.arrow_forward, color: Colors.black),
+            top: 487,
+            left: 46,
+            right: 46,
+            child: _buildLoginButton(
+              color: const Color(0xFFFEE500),
+              text: '카카오로 시작하기',
+              onTap: () {},
+            ),
+          ),
+          Positioned(
+            top: 552,
+            left: 46,
+            right: 46,
+            child: _buildLoginButton(
+              color: Colors.black,
+              text: 'Apple로 로그인',
+              textColor: Colors.white,
+              onTap: () {},
+            ),
+          ),
+          Positioned(
+            top: 617,
+            left: 46,
+            right: 46,
+            child: _buildLoginButton(
+              color: Colors.white,
+              text: 'Google로 계속하기',
+              border: true,
+              onTap: () {},
+            ),
+          ),
+          Positioned(
+            top: 712,
+            left: 126,
+            child: GestureDetector(
+            onTap: () => Navigator.of(context).pushReplacementNamed('/email_login'),
+              child: const Text(
+                '이메일로 계속하기',
+                style: TextStyle(
+                  color: Color(0xFF9A9A9A),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: -1,
+                ),
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildLoginButton({
+    required Color color,
+    required String text,
+    required VoidCallback onTap,
+    Color textColor = const Color(0xFF191919),
+    bool border = false,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(12),
+          border: border ? Border.all(color: const Color(0xFFC5C5C5)) : null,
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          text,
+          style: TextStyle(
+            color: textColor,
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+            letterSpacing: -1,
+          ),
+        ),
       ),
     );
   }
