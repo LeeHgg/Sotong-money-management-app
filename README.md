@@ -1,5 +1,10 @@
 # sotong app project
 
+member
+- lee hakyeong
+- d
+- d
+
 A new Flutter project.
 
 ## Getting Started
