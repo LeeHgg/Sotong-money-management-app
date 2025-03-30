@@ -5,6 +5,11 @@ import 'login.dart';
 import 'login_email.dart';
 import 'signup.dart';
 import 'home.dart';
+import 'signUp/getEmail.dart';
+import 'signUp/getPassword.dart';
+import 'signUp/getUserInfo.dart';
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -16,9 +21,14 @@ class MyApp extends StatelessWidget {
       initialRoute: '/splash',
       onGenerateRoute: (settings) {
         switch (settings.name) {
+          case '/getUserInfo':
+            return MaterialPageRoute(builder: (context) => const GetUserInfoPage());
+          case '/getPassword':
+            return MaterialPageRoute(builder: (context) => const GetPasswordPage());
+          case '/getEmail':
+            return MaterialPageRoute(builder: (context) => const GetEmailPage());
           case '/splash':
-            return MaterialPageRoute(
-                builder: (context) => const SplashScreen());
+            return MaterialPageRoute(builder: (context) => const SplashScreen());
           case '/login':
             return MaterialPageRoute(builder: (context) => const LoginPage());
           case '/email_login':
@@ -54,7 +64,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 3초 뒤 로그인 페이지로 전환
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) { // Flutter의 위젯 트리가 빌드된 후에 특정 작업을 수행하도록 예약하는 기능
       Timer(const Duration(seconds: 3), () {
         Navigator.of(context).pushReplacement(_createRoute());
       });
