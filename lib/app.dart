@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'login.dart';
-import 'login_email.dart';
-import 'signup.dart';
-import 'home.dart';
-import 'signUp/getEmail.dart';
-import 'signUp/getPassword.dart';
-import 'signUp/getUserInfo.dart';
+import 'models/sign_up_info.dart';
+import 'screens/auth/welcome_auth_screen.dart';
+import 'screens/auth/login/login_email.dart';
+import 'screens/home/home.dart';
+import 'screens/auth/signUp/getEmail.dart';
+import 'screens/auth/signUp/getPassword.dart';
+import 'screens/auth/signUp/getUserInfo.dart';
 
 
 
@@ -22,9 +22,22 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/getUserInfo':
-            return MaterialPageRoute(builder: (context) => const GetUserInfoPage());
+            final args = settings.arguments;
+            if (args is SignUpInfo) {
+              return MaterialPageRoute(
+                builder: (context) => GetUserInfoPage(signUpInfo: args),
+              );
+            }
+            // arguments가 null이거나 타입이 안 맞을 때
+            return _errorRoute();
           case '/getPassword':
-            return MaterialPageRoute(builder: (context) => const GetPasswordPage());
+            final args = settings.arguments as SignUpInfo;
+            if (args is SignUpInfo) {
+              return MaterialPageRoute(
+                builder: (context) => GetPasswordPage(signUpInfo: args),
+              );
+            }
+            return _errorRoute();
           case '/getEmail':
             return MaterialPageRoute(builder: (context) => const GetEmailPage());
           case '/splash':
@@ -33,8 +46,6 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(builder: (context) => const LoginPage());
           case '/email_login':
             return MaterialPageRoute(builder: (context) => const EmailLoginPage());
-          case '/signup':
-            return MaterialPageRoute(builder: (context) => const SignupPage());
           case '/':
             return MaterialPageRoute(builder: (context) => const HomePage());
           default:
@@ -56,6 +67,17 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+Route _errorRoute() {
+  return MaterialPageRoute(
+    builder: (_) => Scaffold(
+      appBar: AppBar(title: Text('오류')),
+      body: Center(
+        child: Text('잘못된 접근입니다.'),
+      ),
+    ),
+  );
 }
 
 class SplashScreen extends StatelessWidget {
