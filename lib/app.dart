@@ -8,7 +8,9 @@ import 'screens/home/home.dart';
 import 'screens/auth/signUp/getEmail.dart';
 import 'screens/auth/signUp/getPassword.dart';
 import 'screens/auth/signUp/getUserInfo.dart';
-
+import 'screens/auth/signUp/compSignUp.dart';
+import 'screens/auth/plan/getPlanName.dart';
+import 'screens/auth/plan/getFixedIncome.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -21,6 +23,12 @@ class MyApp extends StatelessWidget {
       initialRoute: '/splash',
       onGenerateRoute: (settings) {
         switch (settings.name) {
+          case '/getFixedIncome':
+            return MaterialPageRoute(builder: (context) => const GetFixedIncomePage());
+          case '/getPlanName':
+            return MaterialPageRoute(builder: (context) => const GetPlanNamePage());
+          case '/compSignUp':
+            return MaterialPageRoute(builder: (context) => const CompSignUpPage());
           case '/getUserInfo':
             final args = settings.arguments;
             if (args is SignUpInfo) {
