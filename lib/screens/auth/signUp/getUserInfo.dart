@@ -248,11 +248,11 @@ class _GetUserInfoPageState extends State<GetUserInfoPage> {
                       .collection('users')
                       .add(widget.signUpInfo.toMap());
 
-                  // ✅ 저장 완료 후 이동 or 알림
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('회원가입이 완료되었습니다!')),
                   );
-                  Navigator.of(context).pushReplacementNamed('/'); // 홈으로 이동
+                  Navigator.of(context).pushReplacementNamed('/compSignUp');
                 } catch (e) {
                   print('Firestore 저장 오류: $e');
                   ScaffoldMessenger.of(context).showSnackBar(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../models/sign_up_info.dart';
 
 class GetPasswordPage extends StatefulWidget {
@@ -13,11 +12,10 @@ class GetPasswordPage extends StatefulWidget {
 
 class _GetPasswordPageState extends State<GetPasswordPage> {
   final _formKey = GlobalKey<FormState>();
-  final _passwordController = TextEditingController(); // _passwordController로 변경
-  final _focusNode = FocusNode(); // FocusNode 추가
-  String _password = '';
+  final _passwordController = TextEditingController();
+  final _focusNode = FocusNode();
+  bool _isValidPassword = false;
 
-  // 비밀번호 입력값 검증 함수
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return '비밀번호를 입력해주세요';
@@ -29,8 +27,18 @@ class _GetPasswordPageState extends State<GetPasswordPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _passwordController.addListener(() {
+      final isValid = _validatePassword(_passwordController.text) == null;
+      setState(() {
+        _isValidPassword = isValid;
+      });
+    });
+  }
+
+  @override
   void dispose() {
-    // FocusNode와 TextEditingController를 정리
     _focusNode.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -38,117 +46,130 @@ class _GetPasswordPageState extends State<GetPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     final signUpInfo = widget.signUpInfo;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Sign Up')),
-      resizeToAvoidBottomInset: true, // 키보드가 올라올 때 화면이 자동으로 조정되도록 설정
-      body: SingleChildScrollView(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
+        leading: const BackButton(),
+      ),
+      body: SafeArea(
         child: Column(
           children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.75,
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(color: Colors.white),
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 46,
-                    top: 129,
-                    child: Text(
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 40),
+                    const Text(
                       '비밀번호를 입력하세요',
                       style: TextStyle(
-                        color: const Color(0xFF231F1F),
                         fontSize: 28,
-                        fontFamily: 'Pretendard Variable',
                         fontWeight: FontWeight.w800,
-                        letterSpacing: -2,
+                        letterSpacing: -1,
                       ),
                     ),
-                  ),
-                  Positioned(
-                    left: 46,
-                    top: 200,
-                    child: Container(
-                      width: 294,
-                      height: 57,
-                      decoration: ShapeDecoration(
-                        color: const Color(0xFFEDF4FF),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Form(
-                          key: _formKey,
-                          child: TextFormField(
-                            controller: _passwordController, // _passwordController로 변경
-                            focusNode: _focusNode, // FocusNode를 연결
-                            obscureText: true, // 비밀번호 입력을 숨기기
-                            decoration: InputDecoration(
-                              hintText: '비밀번호를 입력하세요',
-                              border: InputBorder.none,
-                              filled: true,
-                              fillColor: Colors.transparent,
+                    const SizedBox(height: 32),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: _passwordController.text.isEmpty
+                                  ? const Color(0xFFEDEDED)
+                                  : const Color(0xFFEDF4FF),
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            onSaved: (value) {
-                              _password = value ?? '';
-                            },
-                            validator: _validatePassword, // 비밀번호 검증 함수 호출
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: TextFormField(
+                              controller: _passwordController,
+                              focusNode: _focusNode,
+                              obscureText: true,
+                              validator: _validatePassword,
+                              decoration: const InputDecoration(
+                                hintText: '비밀번호를 입력하세요',
+                                border: InputBorder.none,
+                              ),
+                            ),
                           ),
-                        ),
+                          const SizedBox(height: 8),
+                          Builder(
+                            builder: (_) {
+                              final errorText =
+                              _validatePassword(_passwordController.text);
+                              if (_passwordController.text.isEmpty || errorText == null) {
+                                return const SizedBox.shrink();
+                              }
+                              return Text(
+                                errorText,
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 14,
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 200),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
+
             Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.8,
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: SizedBox(
                 height: 50,
-                padding: const EdgeInsets.symmetric(horizontal: 81, vertical: 13),
-                decoration: ShapeDecoration(
-                  color: const Color(0xFF0062FF),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: InkWell(
-                  onTap: () {
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _isValidPassword
+                      ? () {
                     if (_formKey.currentState?.validate() ?? false) {
                       _formKey.currentState?.save();
-
                       final updatedInfo = SignUpInfo(
                         email: signUpInfo.email,
                         password: _passwordController.text.trim(),
                       );
-
                       Navigator.of(context).pushNamed(
                         '/getUserInfo',
                         arguments: updatedInfo,
                       );
                     }
-                  },
-                  child: Center(
-                    child: Text(
-                      '다음',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontFamily: 'Pretendard Variable',
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -1,
-                      ),
+                  }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _isValidPassword
+                        ? const Color(0xFF0062FF)
+                        : Colors.grey[300],
+                    disabledBackgroundColor: Colors.grey[300],
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    '다음',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 17,
+                      letterSpacing: -1,
                     ),
                   ),
                 ),
               ),
             ),
+            const SizedBox(height: 24),
           ],
         ),
       ),

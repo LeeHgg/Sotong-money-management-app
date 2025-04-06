@@ -128,53 +128,49 @@ class _GetEmailPageState extends State<GetEmailPage> {
             ),
 
             // ✅ 키보드 올라오면 자동으로 버튼도 올라오고, form도 가리지 않음
-            AnimatedPadding(
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeOut,
-              padding: EdgeInsets.only(
-                left: 32,
-                right: 32,
-                bottom: bottomInset > 0 ? bottomInset : 40,
-              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               child: SizedBox(
-                height: 50,
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _isValidEmail
-                      ? () {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      _formKey.currentState?.save();
-                      final email = _emailController.text.trim();
-                      final signUpInfo = SignUpInfo(email: email, password: '');
-                      print('이메일: ${signUpInfo.email}, pw: ${signUpInfo.password}');
-                      Navigator.of(context).pushNamed(
-                        '/getPassword',
-                        arguments: SignUpInfo(email: _emailController.text, password: ''),
-                      );
+                  height: 50,
+                  width: double.infinity,
+                  child:
+                  ElevatedButton(
+                    onPressed: _isValidEmail
+                        ? () {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        _formKey.currentState?.save();
+                        final email = _emailController.text.trim();
+                        final signUpInfo = SignUpInfo(email: email, password: '');
+                        print('이메일: ${signUpInfo.email}, pw: ${signUpInfo.password}');
+                        Navigator.of(context).pushNamed(
+                          '/getPassword',
+                          arguments: SignUpInfo(email: _emailController.text, password: ''),
+                        );
+                      }
                     }
-                  }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _isValidEmail
-                        ? const Color(0xFF0062FF)
-                        : Colors.grey[300],
-                    disabledBackgroundColor: Colors.grey[300],
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _isValidEmail
+                          ? const Color(0xFF0062FF)
+                          : Colors.grey[300],
+                      disabledBackgroundColor: Colors.grey[300],
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    '다음',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 17,
-                      letterSpacing: -1,
+                    child: const Text(
+                      '다음',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 17,
+                        letterSpacing: -1,
+                      ),
                     ),
                   ),
                 ),
-              ),
             ),
+            const SizedBox(height: 24),
           ],
         ),
       ),
