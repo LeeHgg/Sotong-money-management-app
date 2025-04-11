@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'models/plan_info.dart';
 import 'models/sign_up_info.dart';
 import 'screens/auth/welcome_auth_screen.dart';
 import 'screens/auth/login/login_email.dart';
@@ -8,7 +9,7 @@ import 'screens/home/home.dart';
 import 'screens/auth/signUp/getEmail.dart';
 import 'screens/auth/signUp/getPassword.dart';
 import 'screens/auth/signUp/getUserInfo.dart';
-import 'screens/auth/signUp/compSignUp.dart';
+import 'screens/auth/signUp/sign_up_success.dart';
 import 'screens/auth/plan/getPlanName.dart';
 import 'screens/auth/plan/getFixedIncome.dart';
 
@@ -24,11 +25,17 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/getFixedIncome':
-            return MaterialPageRoute(builder: (context) => const GetFixedIncomePage());
+            final args = settings.arguments;
+            if (args is PlanInfo) {
+              return MaterialPageRoute(
+                builder: (context) => GetFixedIncomePage(planInfo: args),
+              );
+            }
+            return _errorRoute();
           case '/getPlanName':
             return MaterialPageRoute(builder: (context) => const GetPlanNamePage());
-          case '/compSignUp':
-            return MaterialPageRoute(builder: (context) => const CompSignUpPage());
+          case '/signUpSuccess':
+            return MaterialPageRoute(builder: (context) => const SignUpSuccessPage());
           case '/getUserInfo':
             final args = settings.arguments;
             if (args is SignUpInfo) {
@@ -36,7 +43,6 @@ class MyApp extends StatelessWidget {
                 builder: (context) => GetUserInfoPage(signUpInfo: args),
               );
             }
-            // arguments가 null이거나 타입이 안 맞을 때
             return _errorRoute();
           case '/getPassword':
             final args = settings.arguments as SignUpInfo;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../models/plan_info.dart';
 
 class GetPlanNamePage extends StatefulWidget {
   const GetPlanNamePage({super.key});
@@ -132,14 +133,14 @@ class _GetPlanNamePageState extends State<GetPlanNamePage> {
             }),
 
             const Spacer(),
-
-            // 안내 문구
-            if (!isValid)
-              const Text(
-                '플랜 목적 입력 필수!\n아래 다음 버튼을 눌러주세요',
-                style: TextStyle(color: Colors.grey, fontSize: 12),
-              ),
-            const SizedBox(height: 8),
+            //
+            // // 안내 문구
+            // if (!isValid)
+            //   const Text(
+            //     '플랜 목적 입력 필수!\n아래 다음 버튼을 눌러주세요',
+            //     style: TextStyle(color: Colors.grey, fontSize: 12),
+            //   ),
+            // const SizedBox(height: 8),
 
             // 다음 버튼
             SizedBox(
@@ -147,7 +148,14 @@ class _GetPlanNamePageState extends State<GetPlanNamePage> {
               height: 48,
               child: ElevatedButton(
                 onPressed: isValid ? () {
-                  Navigator.of(context).pushNamed('/getFixedIncome');
+                  final planInfo = PlanInfo(
+                    planName: _planNameController.text.trim(),
+                    planPurpose: _planPurposeController.text.trim(),
+                  );
+                  Navigator.of(context).pushNamed(
+                    '/getFixedIncome',
+                    arguments: planInfo,
+                  );
                 } : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor:

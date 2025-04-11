@@ -1,7 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../models/plan_info.dart';
+
 class GetFixedIncomePage extends StatefulWidget {
-  const GetFixedIncomePage({super.key});
+  final PlanInfo planInfo;
+
+  const GetFixedIncomePage({super.key, required this.planInfo});
 
   @override
   State<GetFixedIncomePage> createState() => _GetFixedIncomePageState();
@@ -36,6 +42,7 @@ class _GetFixedIncomePageState extends State<GetFixedIncomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final planInfo = ModalRoute.of(context)?.settings.arguments as PlanInfo;
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     return Scaffold(
@@ -168,7 +175,55 @@ class _GetFixedIncomePageState extends State<GetFixedIncomePage> {
                   width: double.infinity,
                   height: 48,
                   child: ElevatedButton(
-                    onPressed: _isFormValid ? () {} : null,
+                    onPressed: _isFormValid ? () async {
+                      // 고정 수입 리스트를 생성
+                      final fixedIncomes = <Map<String, dynamic>>[];
+                      for (int i = 0; i < _dropdownControllers.length; i++) {
+                        final source = _dropdownSelections[i];
+                        final amount = _dropdownControllers[i].text.trim();
+
+                        if (source != null && amount.isNotEmpty) {
+                          fixedIncomes.add({
+                            'source': source,
+                            'amount': int.parse(amount),
+                          });
+                        }
+                      }
+
+                      // 기존 PlanInfo에 fixedIncomes 추가
+                      planInfo.fixedIncomes = fixedIncomes;
+
+                      // 현재 유저 ID 가져오기
+                      final uid = FirebaseAuth.instance.currentUser?.uid;
+                      if (uid == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('로그인이 필요합니다.')),
+                        );
+                        return;
+                      }
+
+                      // Firestore에 저장
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(uid)
+                            .collection('plans')
+                            .doc('main')
+                            .set(planInfo.toMap());
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('플랜이 저장되었습니다!')),
+                        );
+
+                        // 다음 화면으로 이동
+                        Navigator.of(context).pushReplacementNamed('/'); // 원하는 페이지로 수정
+                      } catch (e) {
+                        print('플랜 저장 실패: $e');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('저장 실패: $e')),
+                        );
+                      }
+                    } : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _isFormValid
                           ? const Color(0xFF0062FF)
