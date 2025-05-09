@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sotong/screens/auth/plan/AutoRegisterSelectPage.dart';
+import 'package:sotong/screens/auth/plan/AutoRegisterSelect.dart';
+import 'package:sotong/screens/auth/plan/AutoRegisterSummary.dart';
 import 'package:sotong/screens/auth/plan/VariableExpensePage.dart';
 import 'package:sotong/screens/auth/plan/VariableExpenseSummary.dart';
-import 'package:sotong/screens/auth/plan/planGuidePage.dart';
+import 'package:sotong/screens/auth/plan/planGuide.dart';
 import 'models/VariableExpense_info.dart';
 import 'models/plan_info.dart';
 import 'models/sign_up_info.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sotong',
-      initialRoute: '/splash',
+      initialRoute: '/planGuide',
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/planGuide':
@@ -50,6 +51,15 @@ class MyApp extends StatelessWidget {
             if (args is List<ExpenseItem>) {
               return MaterialPageRoute(
                 builder: (context) => AutoRegisterSelectPage(expenses: args),
+              );
+            }
+            return _errorRoute();
+
+          case '/autoRegisterSummary':
+            final args = settings.arguments;
+            if (args is List<ExpenseItem>) {
+              return MaterialPageRoute(
+                builder: (context) => AutoRegisterSummaryPage(selectedItems: args),
               );
             }
             return _errorRoute();

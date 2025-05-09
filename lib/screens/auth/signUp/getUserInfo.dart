@@ -260,7 +260,6 @@ class _GetUserInfoPageState extends State<GetUserInfoPage> {
                 widget.signUpInfo.gender = selectedGender ?? '';
 
                 try {
-                  // 1. Firebase Authentication에 사용자 생성
                   final UserCredential userCredential = await FirebaseAuth.instance
                       .createUserWithEmailAndPassword(
                     email: widget.signUpInfo.email,
@@ -271,27 +270,18 @@ class _GetUserInfoPageState extends State<GetUserInfoPage> {
 
                   if (uid != null) {
                     String? profileImgUrl;
-
-                    // ✅ 2. Firestore에 저장 (기존 로직)
                     await FirebaseFirestore.instance
                         .collection('users')
                         .doc(uid)
                         .set(widget.signUpInfo.toMap());
-
-                    // ✅ 3. displayName 업데이트 (기존 로직)
                     await userCredential.user?.updateDisplayName(widget.signUpInfo.name);
-
-                    // ✅ 4. 프로필 이미지가 있을 경우 Storage에 저장
                     if (profileImage != null) {
                       profileImgUrl = await uploadImage(profileImage!, uid);
                       if (profileImgUrl != null) {
-                        // ✅ Firestore에 이미지 URL 업데이트
                         await FirebaseFirestore.instance
                             .collection('users')
                             .doc(uid)
                             .update({'profileImg': profileImgUrl});
-
-                        // ✅ signUpInfo에도 업데이트
                         widget.signUpInfo.profileImg = profileImgUrl;
                       }
                     }
