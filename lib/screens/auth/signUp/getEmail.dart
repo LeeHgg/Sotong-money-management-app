@@ -127,7 +127,6 @@ class _GetEmailPageState extends State<GetEmailPage> {
               ),
             ),
 
-            // ✅ 키보드 올라오면 자동으로 버튼도 올라오고, form도 가리지 않음
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: SizedBox(

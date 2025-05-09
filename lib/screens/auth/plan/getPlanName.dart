@@ -152,6 +152,7 @@ class _GetPlanNamePageState extends State<GetPlanNamePage> {
                     planName: _planNameController.text.trim(),
                     planPurpose: _planPurposeController.text.trim(),
                   );
+                  print('이메일: ${planInfo.planName}, pw: ${planInfo.planPurpose}');
                   Navigator.of(context).pushNamed(
                     '/getFixedIncome',
                     arguments: planInfo,

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sotong/screens/auth/plan/AutoRegisterSelectPage.dart';
+import 'package:sotong/screens/auth/plan/VariableExpensePage.dart';
+import 'package:sotong/screens/auth/plan/VariableExpenseSummary.dart';
+import 'package:sotong/screens/auth/plan/planGuidePage.dart';
+import 'models/VariableExpense_info.dart';
 import 'models/plan_info.dart';
 import 'models/sign_up_info.dart';
 import 'screens/auth/welcome_auth_screen.dart';
@@ -24,6 +29,30 @@ class MyApp extends StatelessWidget {
       initialRoute: '/splash',
       onGenerateRoute: (settings) {
         switch (settings.name) {
+          case '/planGuide':
+            return MaterialPageRoute(
+              builder: (context) => const PlanGuidePage(), // 전달값 없이 생성
+            );
+          case '/variableExpense':
+            return MaterialPageRoute(
+              builder: (context) => const VariableExpensePage(),
+            );
+          case '/summary':
+            final args = settings.arguments;
+            if (args is List<ExpenseItem>) {
+              return MaterialPageRoute(
+                builder: (context) => SummaryPage(expenses: args),
+              );
+            }
+            return _errorRoute();
+          case '/autoRegister':
+            final args = settings.arguments;
+            if (args is List<ExpenseItem>) {
+              return MaterialPageRoute(
+                builder: (context) => AutoRegisterSelectPage(expenses: args),
+              );
+            }
+            return _errorRoute();
           case '/getFixedIncome':
             final args = settings.arguments;
             if (args is PlanInfo) {

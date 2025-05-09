@@ -42,7 +42,7 @@ class _GetFixedIncomePageState extends State<GetFixedIncomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final planInfo = ModalRoute.of(context)?.settings.arguments as PlanInfo;
+    final planInfo = widget.planInfo;
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     return Scaffold(
@@ -62,10 +62,10 @@ class _GetFixedIncomePageState extends State<GetFixedIncomePage> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              const Text(
-                '한 달에 한 번 정기적으로 받는 수입을 의미해요',
-                style: TextStyle(fontSize: 13, color: Colors.grey),
-              ),
+              // const Text(
+              //   '한 달에 한 번 정기적으로 받는 수입을 의미해요',
+              //   style: TextStyle(fontSize: 13, color: Colors.grey),
+              // ),
               const SizedBox(height: 32),
               Expanded(
                 child: ListView.builder(
@@ -162,14 +162,14 @@ class _GetFixedIncomePageState extends State<GetFixedIncomePage> {
                   },
                 ),
               ),
-              if (!_isFormValid)
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    '근로소득, 사업/기타 입력 후 다음 버튼을 눌러주세요',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
-                ),
+              // if (!_isFormValid)
+              //   const Padding(
+              //     padding: EdgeInsets.only(bottom: 8.0),
+              //     child: Text(
+              //       '근로소득, 사업/기타 입력 후 다음 버튼을 눌러주세요',
+              //       style: TextStyle(fontSize: 12, color: Colors.grey),
+              //     ),
+              //   ),
 
                 SizedBox(
                   width: double.infinity,

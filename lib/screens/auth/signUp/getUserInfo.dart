@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../models/sign_up_info.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class GetUserInfoPage extends StatefulWidget {
   final SignUpInfo signUpInfo;
@@ -23,6 +24,21 @@ class _GetUserInfoPageState extends State<GetUserInfoPage> {
   String? formattedBirth;
 
   final ImagePicker _picker = ImagePicker();
+
+  Future<String?> uploadImage(File imageFile, String email) async {
+    try {
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('user_profiles')
+          .child('$email.jpg');
+
+      await ref.putFile(imageFile);
+      return await ref.getDownloadURL();
+    } catch (e) {
+      print('이미지 업로드 실패: $e');
+      return null;
+    }
+  }
 
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -241,25 +257,32 @@ class _GetUserInfoPageState extends State<GetUserInfoPage> {
                 widget.signUpInfo.name = nameController.text.trim();
                 widget.signUpInfo.birthday = birthController.text.trim();
                 widget.signUpInfo.gender = selectedGender ?? '';
+                if (profileImage != null) {
+                  final downloadUrl = await uploadImage(profileImage!, widget.signUpInfo.email);
+                  widget.signUpInfo.profileImg = downloadUrl ?? '';
+                }
 
                 print("저장할 유저 정보: ${widget.signUpInfo.toMap()}");
 
                 try {
-                  // 로그인 추가
-                  UserCredential result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                    email: signUpInfo.email,
-                    password: signUpInfo.password,
+                  // 1. Firebase Authentication에 사용자 생성
+                  final UserCredential userCredential = await FirebaseAuth.instance
+                      .createUserWithEmailAndPassword(
+                    email: widget.signUpInfo.email,
+                    password: widget.signUpInfo.password,
                   );
 
-                  final uid = result.user?.uid;
+                  // 2. displayName 업데이트
+                  await userCredential.user!.updateDisplayName(widget.signUpInfo.name);
 
+                  // 3. Firestore에 사용자 정보 저장
                   await FirebaseFirestore.instance
                       .collection('users')
-                      .add(widget.signUpInfo.toMap());
-
+                      .doc(userCredential.user!.uid)
+                      .set(widget.signUpInfo.toMap());
 
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('회원가입이 완료되었습니다!')),
+                    const SnackBar(content: Text('회원가입이 완료되었습니다!')),
                   );
                   Navigator.of(context).pushReplacementNamed('/signUpSuccess');
                 } catch (e) {
