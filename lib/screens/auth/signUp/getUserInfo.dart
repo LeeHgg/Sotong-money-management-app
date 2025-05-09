@@ -25,15 +25,16 @@ class _GetUserInfoPageState extends State<GetUserInfoPage> {
 
   final ImagePicker _picker = ImagePicker();
 
-  Future<String?> uploadImage(File imageFile, String email) async {
+  Future<String?> uploadImage(File imageFile, String uid) async {
     try {
       final ref = FirebaseStorage.instance
           .ref()
-          .child('user_profiles')
-          .child('$email.jpg');
+          .child('user_profiles/$uid.jpg');
 
       await ref.putFile(imageFile);
-      return await ref.getDownloadURL();
+      final downloadUrl = await ref.getDownloadURL();
+      print('이미지 업로드 성공: $downloadUrl');
+      return downloadUrl;
     } catch (e) {
       print('이미지 업로드 실패: $e');
       return null;
@@ -257,12 +258,6 @@ class _GetUserInfoPageState extends State<GetUserInfoPage> {
                 widget.signUpInfo.name = nameController.text.trim();
                 widget.signUpInfo.birthday = birthController.text.trim();
                 widget.signUpInfo.gender = selectedGender ?? '';
-                if (profileImage != null) {
-                  final downloadUrl = await uploadImage(profileImage!, widget.signUpInfo.email);
-                  widget.signUpInfo.profileImg = downloadUrl ?? '';
-                }
-
-                print("저장할 유저 정보: ${widget.signUpInfo.toMap()}");
 
                 try {
                   // 1. Firebase Authentication에 사용자 생성
@@ -272,27 +267,52 @@ class _GetUserInfoPageState extends State<GetUserInfoPage> {
                     password: widget.signUpInfo.password,
                   );
 
-                  // 2. displayName 업데이트
-                  await userCredential.user!.updateDisplayName(widget.signUpInfo.name);
+                  final uid = userCredential.user?.uid;
 
-                  // 3. Firestore에 사용자 정보 저장
-                  await FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(userCredential.user!.uid)
-                      .set(widget.signUpInfo.toMap());
+                  if (uid != null) {
+                    String? profileImgUrl;
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('회원가입이 완료되었습니다!')),
-                  );
-                  Navigator.of(context).pushReplacementNamed('/signUpSuccess');
+                    // ✅ 2. Firestore에 저장 (기존 로직)
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(uid)
+                        .set(widget.signUpInfo.toMap());
+
+                    // ✅ 3. displayName 업데이트 (기존 로직)
+                    await userCredential.user?.updateDisplayName(widget.signUpInfo.name);
+
+                    // ✅ 4. 프로필 이미지가 있을 경우 Storage에 저장
+                    if (profileImage != null) {
+                      profileImgUrl = await uploadImage(profileImage!, uid);
+                      if (profileImgUrl != null) {
+                        // ✅ Firestore에 이미지 URL 업데이트
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(uid)
+                            .update({'profileImg': profileImgUrl});
+
+                        // ✅ signUpInfo에도 업데이트
+                        widget.signUpInfo.profileImg = profileImgUrl;
+                      }
+                    }
+
+                    print("최종 저장할 유저 정보: ${widget.signUpInfo.toMap()}");
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('회원가입이 완료되었습니다!')),
+                    );
+
+                    Navigator.of(context).pushReplacementNamed('/signUpSuccess');
+                  }
                 } catch (e) {
-                  print('Firestore 저장 오류: $e');
+                  print('회원가입 에러: $e');
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('저장 실패: $e')),
+                    SnackBar(content: Text('회원가입 실패: $e')),
                   );
                 }
               }
                   : null,
+
               style: ElevatedButton.styleFrom(
                 backgroundColor:
                 isFormValid ? Colors.blue : Colors.grey[300],
