@@ -32,7 +32,7 @@ class _PlanGuidePageState extends State<PlanGuidePage> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 40),
           child: FutureBuilder<String>(
             future: _getUsername(),
             builder: (context, snapshot) {
@@ -72,10 +72,10 @@ class _PlanGuidePageState extends State<PlanGuidePage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const Spacer(),
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(40),
                     decoration: BoxDecoration(
                       color: const Color(0xFFEDF4FF),
                       borderRadius: BorderRadius.circular(16),
@@ -87,9 +87,9 @@ class _PlanGuidePageState extends State<PlanGuidePage> {
                           text: TextSpan(
                             style: const TextStyle(
                               fontFamily: 'Pretendard',
-                              fontSize: 18,
+                              fontSize: 17,
                               color: Colors.black,
-                              fontWeight: FontWeight.w500, //ExtraBold
+                              fontWeight: FontWeight.w500,
                             ),
                             children: [
                               TextSpan(text: '입력하신 고정 수입과 소비,\n절약비율과 기간을 토대로\n변동소비 한달 금액이 한 달\n'),
@@ -103,34 +103,39 @@ class _PlanGuidePageState extends State<PlanGuidePage> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 25),
                         Container(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.grey.shade300),
-                          ),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Text('한달 전체 수입'),
-                              Text('-'),
-                              Text('고정소비'),
-                              Text('-'),
-                              Text('저축'),
-                              Text('='),
-                              Text('변동소비', style: TextStyle(color: Colors.blue)),
-                            ],
+                          width: double.infinity,
+                          child: Image.asset(
+                            'assets/images/variable1.png',
+                            fit: BoxFit.contain,
                           ),
                         ),
+
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  const Text(
-                    '소통은 여러분의 \'변동소비\' 관리를 도와드립니다.\n\n이 안에서 예산을 꾸려 볼까요?',
-                    style: TextStyle(fontSize: 13, color: Colors.black87),
+                  const Spacer(),
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontSize: 17,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      children: [
+                        TextSpan(text: '소통은 여러분의 '),
+                        TextSpan(
+                          text: '\'변동소비\' 관리',
+                          style: TextStyle(
+                              color: Color(0xFF0062FF),
+                              fontWeight: FontWeight.bold
+                          ),),
+                        TextSpan(text: '를\n도와드립니다.\n\n'),
+                        TextSpan(text: '이 안에서 예산을 꾸려 볼까요?'),
+                      ],
+                    ),
                   ),
                   const Spacer(),
                   SizedBox(
@@ -148,7 +153,11 @@ class _PlanGuidePageState extends State<PlanGuidePage> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text('네, 진행해주세요!'),
+                      child: const Text('네, 진행해주세요!', style: const TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold, //ExtraBold
+                      ),),
                     ),
                   ),
                   const SizedBox(height: 24),

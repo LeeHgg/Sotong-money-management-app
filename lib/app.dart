@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sotong/screens/auth/plan/AutoRegisterSelect.dart';
 import 'package:sotong/screens/auth/plan/AutoRegisterSummary.dart';
-import 'package:sotong/screens/auth/plan/VariableExpensePage.dart';
+import 'package:sotong/screens/auth/plan/VariableExpense.dart';
 import 'package:sotong/screens/auth/plan/VariableExpenseSummary.dart';
 import 'package:sotong/screens/auth/plan/planGuide.dart';
 import 'models/VariableExpense_info.dart';
