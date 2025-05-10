@@ -13,7 +13,7 @@ class AmountChangeChoice extends StatefulWidget {
 }
 
 class _AmountChangeChoiceState extends State<AmountChangeChoice> {
-  bool isGoalSelected = true;
+  bool isGoalSelected = false;
   bool isLimitSelected = false;
 
   @override
@@ -97,22 +97,13 @@ class _AmountChangeChoiceState extends State<AmountChangeChoice> {
               height: 55,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/period_application_complete');
+                  if(isGoalSelected) {
+                    Navigator.pushNamed(context, '/period_application_complete');
+                  } else if(isLimitSelected){
+                    Navigator.pushNamed(context, '/limit_application_complete');
+                  }
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF0062FF),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: const Text(
-                  '다음',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                child: const Text('다음'),
               ),
             ),
             const SizedBox(height: 20),

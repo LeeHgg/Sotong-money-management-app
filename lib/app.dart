@@ -11,7 +11,7 @@ import 'package:sotong/screens/auth/plan/planGuide.dart';
 import 'package:sotong/screens/additional/additional_choice.dart';
 import 'package:sotong/screens/additional/deposit/amount_change_choice.dart';
 import 'package:sotong/screens/additional/deposit/period_application_complete.dart';
-
+import 'package:sotong/screens/additional/deposit/limit_application_complete.dart';
 import 'models/VariableExpense_info.dart';
 import 'models/plan_info.dart';
 import 'models/sign_up_info.dart';
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sotong',
-      initialRoute: '/additional_deposit_choice',
+      initialRoute: '/additional_choice',
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/planGuide':
@@ -109,12 +109,12 @@ class MyApp extends StatelessWidget {
           case '/':
             return MaterialPageRoute(builder: (context) => const HomePage());
             //---------------------------------------------------
-          
-          case '/deposit':
-            return MaterialPageRoute(builder: (context) => const Deposit(),
-            );
+
           case '/additional_choice':
             return MaterialPageRoute(builder: (context) => const AdditionalChoice(),
+            );
+          case '/deposit':
+            return MaterialPageRoute(builder: (context) => const Deposit(),
             );
           case '/amount_change_choice':
             return MaterialPageRoute(builder: (context) => const AmountChangeChoice(depositItems: [],),
@@ -122,10 +122,15 @@ class MyApp extends StatelessWidget {
           case '/period_application_complete':
             return MaterialPageRoute(builder: (context) => const PeriodApplicationComplete(),
             );
+          case '/limit_application_complete':
+            return MaterialPageRoute(builder: (context) => const LimitApplicationComplete(),
+            );
+
           default:
             return null;
         }
       },
+      home: const AdditionalChoice(),
       // theme: ThemeData(
       //   scaffoldBackgroundColor: Colors.white,
       //   appBarTheme: AppBarTheme(
@@ -188,6 +193,25 @@ class MyApp extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             minimumSize: const Size.fromHeight(55), // 높이 고정
+          ),
+        ),
+
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            padding: const EdgeInsets.all(16),
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+              side: const BorderSide(
+                color: Color(0xFFD9D9D9),
+                width: 1,
+              ),
+            ),
+            foregroundColor: Colors.black54,
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontFamily: 'Pretendard',
+            ),
           ),
         ),
 

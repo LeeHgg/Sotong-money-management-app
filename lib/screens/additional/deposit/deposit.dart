@@ -69,7 +69,7 @@ class _DepositState extends State<Deposit> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pushNamed(context, '/'),
+          onPressed: () => Navigator.pop(context),
         ),
         title: const Text('추가입금'),
         backgroundColor: Colors.transparent,
@@ -84,7 +84,6 @@ class _DepositState extends State<Deposit> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                color: Colors.white,
                 border: Border.all(color: Colors.grey[300]!),
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -166,27 +165,10 @@ class _DepositState extends State<Deposit> {
 
             TextButton(
               onPressed: _addDepositItem,
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.all(16),
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  side: const BorderSide(
-                    color: Color(0xFFD9D9D9),
-                    width: 1,
-                  ),
-                ),
-              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: const [
-                  Text(
-                    '입금내역 추가+',
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 16,
-                    ),
-                  ),
+                  Text('입금내역 추가+'),
                 ],
               ),
             ),
@@ -198,20 +180,7 @@ class _DepositState extends State<Deposit> {
                 onPressed: depositItems.isEmpty ? null : () {
                   Navigator.pushNamed(context, '/amount_change_choice');
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF0062FF),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: const Text(
-                  '다음',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                child: const Text('다음'),
               ),
             ),
             const SizedBox(height: 20),

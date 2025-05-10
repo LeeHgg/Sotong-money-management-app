@@ -51,7 +51,7 @@ class AdditionalChoice extends StatelessWidget {
                   '추가 입금이 생겼어요',
                   style: TextStyle(
                     fontSize: 17,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.normal,
                     letterSpacing: -1,
                   ),
                 ),
@@ -79,7 +79,7 @@ class AdditionalChoice extends StatelessWidget {
                   '추가 지출이 생겼어요',
                   style: TextStyle(
                     fontSize: 17,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.normal,
                     letterSpacing: -1,
                   ),
                 ),

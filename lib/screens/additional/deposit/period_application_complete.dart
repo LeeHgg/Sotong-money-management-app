@@ -41,7 +41,7 @@ class PeriodApplicationComplete extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/');
+                    Navigator.pushReplacementNamed(context, '/');
                   },
                   child: const Text('확인했어요'),
                 ),
