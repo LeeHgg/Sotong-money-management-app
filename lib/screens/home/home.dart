@@ -14,7 +14,7 @@ class _HomePageState extends State<HomePage> {
     return Column(
       children: [
         Container(
-          width: 393,
+          width: double.infinity,
           height: 852,
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(color: Colors.white),
@@ -32,13 +32,16 @@ class _HomePageState extends State<HomePage> {
               Positioned(
                 left: 41,
                 top: 168,
-                child: Container(
-                  width: 311,
-                  height: 118,
-                  decoration: ShapeDecoration(
-                    color: const Color(0xFFF4F4F4),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                child: GestureDetector(
+                  onTap: ()=> Navigator.pushNamed(context, '/additional_deposit_choice'),
+                  child: Container(
+                    width: 311,
+                    height: 118,
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFFF4F4F4),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
                     ),
                   ),
                 ),

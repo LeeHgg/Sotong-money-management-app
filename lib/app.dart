@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sotong/screens/additional/deposit/deposit_screen.dart';
 import 'package:sotong/screens/auth/plan/AutoRegisterSelect.dart';
 import 'package:sotong/screens/auth/plan/AutoRegisterSummary.dart';
 import 'package:sotong/screens/auth/plan/VariableExpense.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sotong',
-      initialRoute: '/additional_deposit',
+      initialRoute: '/additional_deposit_choice',
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/planGuide':
@@ -102,24 +103,53 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(builder: (context) => const EmailLoginPage());
           case '/':
             return MaterialPageRoute(builder: (context) => const HomePage());
-          case '/additional_deposit':
+            //---------------------------------------------------
+          case '/additional_deposit_choice':
             return MaterialPageRoute(builder: (context) => const AdditionalChoiceScreen(),
+            );
+          case '/deposit_screen':
+            return MaterialPageRoute(builder: (context) => const DepositScreen(),
             );
           default:
             return null;
         }
       },
+      // theme: ThemeData(
+      //   scaffoldBackgroundColor: Colors.white,
+      //   appBarTheme: AppBarTheme(
+      //     backgroundColor: Colors.white,
+      //     iconTheme: IconThemeData(color: Colors.black),
+      //     titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
+      //   ),
+      //   bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      //     backgroundColor: Colors.white,
+      //     selectedItemColor: Colors.black,
+      //     unselectedItemColor: Colors.grey,
+      //   ),
+      // ),
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.black),
-          titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
+        fontFamily: 'Pretendard',
+        useMaterial3: true,
+
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: const Color(0xFFEDEDED),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          hintStyle: const TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFF909090),
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
         ),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: Colors.white,
-          selectedItemColor: Colors.black,
-          unselectedItemColor: Colors.grey,
+
+        dropdownMenuTheme: DropdownMenuThemeData(
+          inputDecorationTheme: InputDecorationTheme(
+            contentPadding: EdgeInsets.symmetric(horizontal: 16),
+          ),
         ),
       ),
     );

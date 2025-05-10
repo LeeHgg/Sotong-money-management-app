@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'deposit/deposit_screen.dart';
 
 class AdditionalChoiceScreen extends StatelessWidget {
   const AdditionalChoiceScreen({super.key});
@@ -35,8 +36,7 @@ class AdditionalChoiceScreen extends StatelessWidget {
             // 첫 번째 선택 박스
             GestureDetector(
               onTap: () {
-                // TODO: 입금 추가 로직
-                Navigator.pushNamed(context, '/variableExpense');
+                Navigator.pushNamed(context, '/deposit_screen');
               },
               child: Container(
                 width: double.infinity,
