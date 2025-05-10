@@ -6,6 +6,7 @@ import 'package:sotong/screens/auth/plan/AutoRegisterSummary.dart';
 import 'package:sotong/screens/auth/plan/VariableExpense.dart';
 import 'package:sotong/screens/auth/plan/VariableExpenseSummary.dart';
 import 'package:sotong/screens/auth/plan/planGuide.dart';
+import 'package:sotong/screens/additional/additional_choice_screen.dart';
 import 'models/VariableExpense_info.dart';
 import 'models/plan_info.dart';
 import 'models/sign_up_info.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sotong',
-      initialRoute: '/planGuide',
+      initialRoute: '/additional_deposit',
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/planGuide':
@@ -101,6 +102,9 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(builder: (context) => const EmailLoginPage());
           case '/':
             return MaterialPageRoute(builder: (context) => const HomePage());
+          case '/additional_deposit':
+            return MaterialPageRoute(builder: (context) => const AdditionalChoiceScreen(),
+            );
           default:
             return null;
         }
