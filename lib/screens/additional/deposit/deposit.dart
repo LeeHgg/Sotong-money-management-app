@@ -12,14 +12,14 @@ class DepositItem {
   });
 }
 
-class DepositScreen extends StatefulWidget {
-  const DepositScreen({super.key});
+class Deposit extends StatefulWidget {
+  const Deposit({super.key});
 
   @override
-  State<DepositScreen> createState() => _DepositScreenState();
+  State<Deposit> createState() => _DepositState();
 }
 
-class _DepositScreenState extends State<DepositScreen> {
+class _DepositState extends State<Deposit> {
   String? selectedCategory;
   final List<String> categories = ['용돈', '장학금', '지원금', '기타(직접입력)'];
   final TextEditingController _contentController = TextEditingController();

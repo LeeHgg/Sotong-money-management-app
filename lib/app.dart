@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sotong/screens/additional/deposit/deposit_screen.dart';
+import 'package:sotong/screens/additional/deposit/deposit.dart';
 import 'package:sotong/screens/auth/plan/AutoRegisterSelect.dart';
 import 'package:sotong/screens/auth/plan/AutoRegisterSummary.dart';
 import 'package:sotong/screens/auth/plan/VariableExpense.dart';
 import 'package:sotong/screens/auth/plan/VariableExpenseSummary.dart';
 import 'package:sotong/screens/auth/plan/planGuide.dart';
-import 'package:sotong/screens/additional/additional_choice_screen.dart';
-import 'package:sotong/screens/additional/deposit/amount_change_choice_screen.dart';
+import 'package:sotong/screens/additional/additional_choice.dart';
+import 'package:sotong/screens/additional/deposit/amount_change_choice.dart';
 import 'models/VariableExpense_info.dart';
 import 'models/plan_info.dart';
 import 'models/sign_up_info.dart';
@@ -107,14 +107,14 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(builder: (context) => const HomePage());
             //---------------------------------------------------
           
-          case '/deposit_screen':
-            return MaterialPageRoute(builder: (context) => const DepositScreen(),
+          case '/deposit':
+            return MaterialPageRoute(builder: (context) => const Deposit(),
             );
-          case '/additional_deposit_choice':
-            return MaterialPageRoute(builder: (context) => const AdditionalChoiceScreen(),
+          case '/additional_deposit':
+            return MaterialPageRoute(builder: (context) => const AdditionalChoice(),
             );
           case '/amount_change_choice':
-            return MaterialPageRoute(builder: (context) => const AmountChangeChoiceScreen(depositItems: [],),
+            return MaterialPageRoute(builder: (context) => const AmountChangeChoice(depositItems: [],),
             );
           default:
             return null;

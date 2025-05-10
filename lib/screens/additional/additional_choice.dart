@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'deposit/deposit_screen.dart';
 
-class AdditionalChoiceScreen extends StatelessWidget {
-  const AdditionalChoiceScreen({super.key});
+class AdditionalChoice extends StatelessWidget {
+  const AdditionalChoice({super.key});
 
   @override
   Widget build(BuildContext context) {

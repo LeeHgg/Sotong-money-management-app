@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class DepositGoalScreen extends StatefulWidget {
+class AmountChangeChoice extends StatefulWidget {
   final List<dynamic> depositItems;
 
-  const DepositGoalScreen({
+  const AmountChangeChoice({
     super.key,
     required this.depositItems,
   });
 
   @override
-  State<DepositGoalScreen> createState() => _DepositGoalScreenState();
+  State<AmountChangeChoice> createState() => _AmountChangeChoiceState();
 }
 
-class _DepositGoalScreenState extends State<DepositGoalScreen> {
+class _AmountChangeChoiceState extends State<AmountChangeChoice> {
   bool isGoalSelected = true;
   bool isLimitSelected = false;
 
@@ -35,16 +35,43 @@ class _DepositGoalScreenState extends State<DepositGoalScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 40),
-            const Text(
-              '금액에 변화가 생겼어요.\n소비 한도나 목표 달성 기간을\n변경하시겠어요?',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            const Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: '금액에 변화가 생겼어요.\n',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text: '소비 한도',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF0062FF), // 파란색 강조
+                    ),
+                  ),
+                  TextSpan(
+                    text: '나 ',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text: '목표 달성 기간',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF0062FF), // 파란색 강조
+                    ),
+                  ),
+                  TextSpan(
+                    text: '을\n변경하시겠어요?',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 40),
             _buildOptionButton(
-              title: '기간을 올릴래요',
+              title: '기간을 변경할래요',
               isSelected: isGoalSelected,
               onTap: () {
                 setState(() {
@@ -55,7 +82,7 @@ class _DepositGoalScreenState extends State<DepositGoalScreen> {
             ),
             const SizedBox(height: 16),
             _buildOptionButton(
-              title: '소비 한도를 늘릴래요',
+              title: '소비 한도를 변경할래요',
               isSelected: isLimitSelected,
               onTap: () {
                 setState(() {
@@ -71,7 +98,6 @@ class _DepositGoalScreenState extends State<DepositGoalScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   // TODO: Implement the next screen navigation
-                  Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF0062FF),
