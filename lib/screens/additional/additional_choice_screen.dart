@@ -71,8 +71,9 @@ class AdditionalChoiceScreen extends StatelessWidget {
                 height: 57,
                 padding: const EdgeInsets.symmetric(horizontal: 29),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEDF4FF),
+                  // color: const Color(0xFFEDF4FF),
                   borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFFC7C7C7), width: 1),
                 ),
                 alignment: Alignment.centerLeft,
                 child: const Text(

@@ -8,6 +8,7 @@ import 'package:sotong/screens/auth/plan/VariableExpense.dart';
 import 'package:sotong/screens/auth/plan/VariableExpenseSummary.dart';
 import 'package:sotong/screens/auth/plan/planGuide.dart';
 import 'package:sotong/screens/additional/additional_choice_screen.dart';
+import 'package:sotong/screens/additional/deposit/amount_change_choice_screen.dart';
 import 'models/VariableExpense_info.dart';
 import 'models/plan_info.dart';
 import 'models/sign_up_info.dart';
@@ -20,6 +21,7 @@ import 'screens/auth/signUp/getUserInfo.dart';
 import 'screens/auth/signUp/sign_up_success.dart';
 import 'screens/auth/plan/getPlanName.dart';
 import 'screens/auth/plan/getFixedIncome.dart';
+
 
 
 class MyApp extends StatelessWidget {
@@ -104,11 +106,15 @@ class MyApp extends StatelessWidget {
           case '/':
             return MaterialPageRoute(builder: (context) => const HomePage());
             //---------------------------------------------------
+          
+          case '/deposit_screen':
+            return MaterialPageRoute(builder: (context) => const DepositScreen(),
+            );
           case '/additional_deposit_choice':
             return MaterialPageRoute(builder: (context) => const AdditionalChoiceScreen(),
             );
-          case '/deposit_screen':
-            return MaterialPageRoute(builder: (context) => const DepositScreen(),
+          case '/amount_change_choice':
+            return MaterialPageRoute(builder: (context) => const AmountChangeChoiceScreen(depositItems: [],),
             );
           default:
             return null;

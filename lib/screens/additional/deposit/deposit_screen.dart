@@ -196,8 +196,7 @@ class _DepositScreenState extends State<DepositScreen> {
               height: 55,
               child: ElevatedButton(
                 onPressed: depositItems.isEmpty ? null : () {
-                  // TODO: 최종 저장 로직 구현
-                  Navigator.pop(context, depositItems);
+                  Navigator.pushNamed(context, '/amount_change_choice');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF0062FF),
