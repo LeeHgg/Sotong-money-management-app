@@ -7,8 +7,11 @@ import 'package:sotong/screens/auth/plan/AutoRegisterSummary.dart';
 import 'package:sotong/screens/auth/plan/VariableExpense.dart';
 import 'package:sotong/screens/auth/plan/VariableExpenseSummary.dart';
 import 'package:sotong/screens/auth/plan/planGuide.dart';
+
 import 'package:sotong/screens/additional/additional_choice.dart';
 import 'package:sotong/screens/additional/deposit/amount_change_choice.dart';
+import 'package:sotong/screens/additional/deposit/period_application_complete.dart';
+
 import 'models/VariableExpense_info.dart';
 import 'models/plan_info.dart';
 import 'models/sign_up_info.dart';
@@ -110,11 +113,14 @@ class MyApp extends StatelessWidget {
           case '/deposit':
             return MaterialPageRoute(builder: (context) => const Deposit(),
             );
-          case '/additional_deposit':
+          case '/additional_choice':
             return MaterialPageRoute(builder: (context) => const AdditionalChoice(),
             );
           case '/amount_change_choice':
             return MaterialPageRoute(builder: (context) => const AmountChangeChoice(depositItems: [],),
+            );
+          case '/period_application_complete':
+            return MaterialPageRoute(builder: (context) => const PeriodApplicationComplete(),
             );
           default:
             return null;
@@ -137,6 +143,18 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Pretendard',
         useMaterial3: true,
 
+        scaffoldBackgroundColor: Colors.white,
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.black),
+            titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
+          ),
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            backgroundColor: Colors.white,
+            selectedItemColor: Colors.black,
+            unselectedItemColor: Colors.grey,
+          ),
+
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: const Color(0xFFEDEDED),
@@ -157,6 +175,22 @@ class MyApp extends StatelessWidget {
             contentPadding: EdgeInsets.symmetric(horizontal: 16),
           ),
         ),
+
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF0062FF),
+            foregroundColor: Colors.white,
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            minimumSize: const Size.fromHeight(55), // 높이 고정
+          ),
+        ),
+
       ),
     );
   }

@@ -97,7 +97,7 @@ class _AmountChangeChoiceState extends State<AmountChangeChoice> {
               height: 55,
               child: ElevatedButton(
                 onPressed: () {
-                  // TODO: Implement the next screen navigation
+                  Navigator.pushNamed(context, '/period_application_complete');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF0062FF),

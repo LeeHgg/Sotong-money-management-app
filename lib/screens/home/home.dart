@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
                 left: 41,
                 top: 168,
                 child: GestureDetector(
-                  onTap: ()=> Navigator.pushNamed(context, '/additional_deposit_choice'),
+                  onTap: ()=> Navigator.pushNamed(context, '/additional_choice'),
                   child: Container(
                     width: 311,
                     height: 118,

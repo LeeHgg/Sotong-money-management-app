@@ -35,7 +35,7 @@ class AdditionalChoice extends StatelessWidget {
             // 첫 번째 선택 박스
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/deposit_screen');
+                Navigator.pushNamed(context, '/deposit');
               },
               child: Container(
                 width: double.infinity,
