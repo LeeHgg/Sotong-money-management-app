@@ -10,7 +10,7 @@ class AdditionalChoice extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pushNamed(context, '/'),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,

@@ -216,6 +216,7 @@ class _GetFixedIncomePageState extends State<GetFixedIncomePage> {
                         );
 
                         // 다음 화면으로 이동
+                        // TODO: 고정소비 페이지 만들어야함.
                         Navigator.of(context).pushReplacementNamed('/'); // 원하는 페이지로 수정
                       } catch (e) {
                         print('플랜 저장 실패: $e');

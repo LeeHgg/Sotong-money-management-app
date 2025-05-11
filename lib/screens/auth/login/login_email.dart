@@ -112,7 +112,6 @@ class _EmailLoginPageState extends State<EmailLoginPage> {
                         controller: _emailController,
                         decoration: const InputDecoration(
                           labelText: 'Email',
-                          border: OutlineInputBorder(),
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -120,7 +119,6 @@ class _EmailLoginPageState extends State<EmailLoginPage> {
                         controller: _passwordController,
                         decoration: const InputDecoration(
                           labelText: 'Password',
-                          border: OutlineInputBorder(),
                         ),
                         obscureText: true,
                       ),

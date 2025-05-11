@@ -152,7 +152,14 @@ class _GetPlanNamePageState extends State<GetPlanNamePage> {
                     planName: _planNameController.text.trim(),
                     planPurpose: _planPurposeController.text.trim(),
                   );
-                  print('이메일: ${planInfo.planName}, pw: ${planInfo.planPurpose}');
+                  print('계획이름: ${planInfo.planName}, 목적: ${planInfo.planPurpose}');
+                  if (_planNameController.text.trim().isEmpty ||
+                      _planPurposeController.text.trim().isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('모든 항목을 입력해주세요.')),
+                    );
+                    return;
+                  }
                   Navigator.of(context).pushNamed(
                     '/getFixedIncome',
                     arguments: planInfo,

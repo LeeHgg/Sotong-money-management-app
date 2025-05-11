@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sotong',
-      initialRoute: '/additional_choice',
+      initialRoute: '/planGuide',
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/planGuide':
@@ -130,7 +130,7 @@ class MyApp extends StatelessWidget {
             return null;
         }
       },
-      home: const AdditionalChoice(),
+      home: const HomePage(),
       // theme: ThemeData(
       //   scaffoldBackgroundColor: Colors.white,
       //   appBarTheme: AppBarTheme(
