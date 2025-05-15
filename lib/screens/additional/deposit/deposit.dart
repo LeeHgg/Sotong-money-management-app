@@ -75,59 +75,6 @@ class _DepositState extends State<Deposit> {
     });
   }
 
-  Future<void> _saveToFirebase() async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('로그인이 필요합니다.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
-
-      final batch = FirebaseFirestore.instance.batch();
-      final planRef = FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .collection('plans')
-          .doc('main');
-
-      final depositRef = planRef.collection('additionalDeposits');
-      int totalDepositAmount = 0;
-
-      for (var item in depositItems) {
-        final newDoc = depositRef.doc();
-        batch.set(newDoc, item.toJson());
-        totalDepositAmount += item.amount;
-      }
-
-      batch.update(planRef, {
-        'currentSavedAmount': FieldValue.increment(totalDepositAmount),
-      });
-
-      await batch.commit();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('입금 내역이 저장되었습니다.'),
-          backgroundColor: Colors.green,
-        ),
-      );
-
-      Navigator.pushNamed(context, '/amount_change_choice');
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('저장 중 오류가 발생했습니다: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -257,8 +204,31 @@ class _DepositState extends State<Deposit> {
               width: double.infinity,
               height: 55,
               child: ElevatedButton(
-                onPressed: depositItems.isEmpty ? null : _saveToFirebase,
-                child: const Text('다음'),
+                onPressed: depositItems.isEmpty ? null : () {
+                  Navigator.pushNamed(
+                    context,
+                    '/amount_change_choice',
+                    arguments: depositItems,
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: depositItems.isEmpty
+                      ? const Color(0xFFF4F4F4)
+                      : Theme.of(context).primaryColor,
+                  foregroundColor: depositItems.isEmpty
+                      ? const Color(0xFF9E9E9E)
+                      : Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  '다음',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 20),

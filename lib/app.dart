@@ -117,8 +117,13 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(builder: (context) => const Deposit(),
             );
           case '/amount_change_choice':
-            return MaterialPageRoute(builder: (context) => const AmountChangeChoice(depositItems: [],),
-            );
+            final args = settings.arguments;
+            if (args is List<DepositItem>) {
+              return MaterialPageRoute(
+                builder: (context) => AmountChangeChoice(depositItems: args),
+              );
+            }
+            return _errorRoute();
           case '/period_application_complete':
             return MaterialPageRoute(builder: (context) => const PeriodApplicationComplete(),
             );
@@ -134,7 +139,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Pretendard',
         useMaterial3: true,
-
+        primaryColor: const Color(0xFF2D64D8),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF2D64D8),
+          primary: const Color(0xFF2D64D8),
+        ),
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.transparent,

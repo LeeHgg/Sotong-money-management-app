@@ -8,7 +8,7 @@ class LimitApplicationComplete extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 46.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -20,9 +20,9 @@ class LimitApplicationComplete extends StatelessWidget {
                 color: const Color(0xFFE8F1FF),
                 borderRadius: BorderRadius.circular(40),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.account_balance_wallet,
-                color: Color(0xFF0062FF),
+                color: Theme.of(context).primaryColor,
                 size: 40,
               ),
             ),
@@ -31,8 +31,11 @@ class LimitApplicationComplete extends StatelessWidget {
               '1,500,000원을\n소비한도에 반영했어요!',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontFamily: 'Pretendard',
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                height: 1.3,
+                letterSpacing: -1,
               ),
             ),
             const SizedBox(height: 16),
@@ -40,8 +43,12 @@ class LimitApplicationComplete extends StatelessWidget {
               '기존 플랜의 하루 소비한도가\n7,000원에서 8,500원으로 변경되었어요',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 16,
-                color: Colors.black54,
+                fontFamily: 'Pretendard',
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF909090),
+                height: 1.3,
+                letterSpacing: -0.5,
               ),
             ),
             const Spacer(),
@@ -52,7 +59,21 @@ class LimitApplicationComplete extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, '/');
                 },
-                child: const Text('확인했어요'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  '확인했어요',
+                  style: TextStyle(
+                    fontFamily: 'Pretendard',
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 40),
