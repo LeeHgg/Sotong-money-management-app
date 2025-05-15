@@ -170,6 +170,12 @@ class _DepositState extends State<Deposit> {
                     ),
                   ),
                 ),
+                width: MediaQuery.of(context).size.width - 92,
+                inputDecorationTheme: InputDecorationTheme(
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                ),
                 dropdownMenuEntries: types.map(
                   (type) => DropdownMenuEntry(
                     value: type,
