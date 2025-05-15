@@ -125,11 +125,21 @@ class MyApp extends StatelessWidget {
             }
             return _errorRoute();
           case '/period_application_complete':
-            return MaterialPageRoute(builder: (context) => const PeriodApplicationComplete(),
-            );
+            final args = settings.arguments;
+            if (args is List<DepositItem>) {
+              return MaterialPageRoute(
+                builder: (context) => PeriodApplicationComplete(depositItems: args),
+              );
+            }
+            return _errorRoute();
           case '/limit_application_complete':
-            return MaterialPageRoute(builder: (context) => const LimitApplicationComplete(),
-            );
+            final args = settings.arguments;
+            if (args is List<DepositItem>) {
+              return MaterialPageRoute(
+                builder: (context) => LimitApplicationComplete(depositItems: args),
+              );
+            }
+            return _errorRoute();
 
           default:
             return null;

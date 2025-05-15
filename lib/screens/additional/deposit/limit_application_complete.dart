@@ -1,7 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sotong/screens/additional/deposit/deposit.dart';
 
 class LimitApplicationComplete extends StatelessWidget {
-  const LimitApplicationComplete({super.key});
+  final List<DepositItem> depositItems;
+
+  const LimitApplicationComplete({
+    super.key,
+    required this.depositItems,
+  });
+
+  Future<void> _uploadToFirebase(BuildContext context) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('로그인이 필요합니다.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      final batch = FirebaseFirestore.instance.batch();
+      final planRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('plans')
+          .doc('main');
+
+      final depositRef = planRef.collection('additionalDeposits');
+      int totalDepositAmount = 0;
+
+      for (var item in depositItems) {
+        final newDoc = depositRef.doc();
+        batch.set(newDoc, item.toJson());
+        totalDepositAmount += item.amount;
+      }
+
+      batch.update(planRef, {
+        'currentSavedAmount': FieldValue.increment(totalDepositAmount),
+      });
+
+      await batch.commit();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('저장 중 오류가 발생했습니다: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +108,8 @@ class LimitApplicationComplete extends StatelessWidget {
               width: double.infinity,
               height: 55,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  await _uploadToFirebase(context);
                   Navigator.pushReplacementNamed(context, '/');
                 },
                 style: ElevatedButton.styleFrom(

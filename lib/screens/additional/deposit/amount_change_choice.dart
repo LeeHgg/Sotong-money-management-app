@@ -19,52 +19,18 @@ class _AmountChangeChoiceState extends State<AmountChangeChoice> {
   bool isGoalSelected = false;
   bool isLimitSelected = false;
 
-  Future<void> _saveToFirebase() async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('로그인이 필요합니다.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
-
-      final batch = FirebaseFirestore.instance.batch();
-      final planRef = FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .collection('plans')
-          .doc('main');
-
-      final depositRef = planRef.collection('additionalDeposits');
-      int totalDepositAmount = 0;
-
-      for (var item in widget.depositItems) {
-        final newDoc = depositRef.doc();
-        batch.set(newDoc, item.toJson());
-        totalDepositAmount += item.amount;
-      }
-
-      batch.update(planRef, {
-        'currentSavedAmount': FieldValue.increment(totalDepositAmount),
-      });
-
-      await batch.commit();
-
-      if (isGoalSelected) {
-        Navigator.pushNamed(context, '/period_application_complete');
-      } else if (isLimitSelected) {
-        Navigator.pushNamed(context, '/limit_application_complete');
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('저장 중 오류가 발생했습니다: $e'),
-          backgroundColor: Colors.red,
-        ),
+  void _navigateToNextScreen() {
+    if (isGoalSelected) {
+      Navigator.pushNamed(
+        context,
+        '/period_application_complete',
+        arguments: widget.depositItems,
+      );
+    } else if (isLimitSelected) {
+      Navigator.pushNamed(
+        context,
+        '/limit_application_complete',
+        arguments: widget.depositItems,
       );
     }
   }
@@ -149,7 +115,7 @@ class _AmountChangeChoiceState extends State<AmountChangeChoice> {
               width: double.infinity,
               height: 55,
               child: ElevatedButton(
-                onPressed: (isGoalSelected || isLimitSelected) ? _saveToFirebase : null,
+                onPressed: (isGoalSelected || isLimitSelected) ? _navigateToNextScreen : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: (isGoalSelected || isLimitSelected)
                       ? Theme.of(context).primaryColor
