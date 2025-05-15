@@ -131,90 +131,81 @@ class MyApp extends StatelessWidget {
         }
       },
       home: const HomePage(),
-      // theme: ThemeData(
-      //   scaffoldBackgroundColor: Colors.white,
-      //   appBarTheme: AppBarTheme(
-      //     backgroundColor: Colors.white,
-      //     iconTheme: IconThemeData(color: Colors.black),
-      //     titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
-      //   ),
-      //   bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      //     backgroundColor: Colors.white,
-      //     selectedItemColor: Colors.black,
-      //     unselectedItemColor: Colors.grey,
-      //   ),
-      // ),
       theme: ThemeData(
         fontFamily: 'Pretendard',
         useMaterial3: true,
 
         scaffoldBackgroundColor: Colors.white,
-          appBarTheme: AppBarTheme(
-            backgroundColor: Colors.white,
-            iconTheme: IconThemeData(color: Colors.black),
-            titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          iconTheme: IconThemeData(
+            color: Color(0xFF232020),
           ),
-          bottomNavigationBarTheme: BottomNavigationBarThemeData(
-            backgroundColor: Colors.white,
-            selectedItemColor: Colors.black,
-            unselectedItemColor: Colors.grey,
+          titleTextStyle: TextStyle(
+            fontFamily: 'Pretendard',
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF232020),
+            letterSpacing: -2,
           ),
+        ),
 
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: const Color(0xFFEDEDED),
+          fillColor: const Color(0xFFF4F4F4),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide.none,
           ),
           hintStyle: const TextStyle(
+            fontFamily: 'Pretendard',
             fontSize: 17,
             fontWeight: FontWeight.w500,
             color: Color(0xFF909090),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 18,
+          ),
         ),
 
-        dropdownMenuTheme: DropdownMenuThemeData(
-          inputDecorationTheme: InputDecorationTheme(
-            contentPadding: EdgeInsets.symmetric(horizontal: 16),
+        dropdownMenuTheme: const DropdownMenuThemeData(
+          textStyle: TextStyle(
+            fontFamily: 'Pretendard',
+            fontSize: 17,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF232020),
           ),
         ),
 
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF0062FF),
-            foregroundColor: Colors.white,
+            backgroundColor: const Color(0xFFF4F4F4),
+            foregroundColor: const Color(0xFF9D9D9D),
             textStyle: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+              fontFamily: 'Pretendard',
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
             ),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(12),
             ),
-            minimumSize: const Size.fromHeight(55), // 높이 고정
+            minimumSize: const Size.fromHeight(50),
           ),
         ),
 
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            padding: const EdgeInsets.all(16),
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-              side: const BorderSide(
-                color: Color(0xFFD9D9D9),
-                width: 1,
-              ),
-            ),
-            foregroundColor: Colors.black54,
+            padding: EdgeInsets.zero,
             textStyle: const TextStyle(
-              fontSize: 16,
               fontFamily: 'Pretendard',
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
             ),
+            foregroundColor: const Color(0xFFB0B0B0),
           ),
         ),
-
       ),
     );
   }

@@ -9,6 +9,34 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String userName = '사용자';  // 기본값
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+  }
+
+  Future<void> _loadUserName() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final userData = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+        
+        if (userData.exists && userData.data()?['name'] != null) {
+          setState(() {
+            userName = userData.data()!['name'];
+          });
+        }
+      }
+    } catch (e) {
+      print('사용자 이름을 불러오는데 실패했습니다: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -327,7 +355,7 @@ class _HomePageState extends State<HomePage> {
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: '김유저',
+                        text: userName,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 24,

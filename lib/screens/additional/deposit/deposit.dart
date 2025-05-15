@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DepositItem {
-  String category;
+  String type;
   String content;
   int amount;
+  DateTime createdAt;
 
   DepositItem({
-    required this.category,
+    required this.type,
     required this.content,
     required this.amount,
-  });
+    DateTime? createdAt,
+  }) : createdAt = createdAt ?? DateTime.now();
+
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'content': content,
+      'amount': amount,
+      'createdAt': createdAt,
+    };
+  }
 }
 
 class Deposit extends StatefulWidget {
@@ -20,8 +33,8 @@ class Deposit extends StatefulWidget {
 }
 
 class _DepositState extends State<Deposit> {
-  String? selectedCategory;
-  final List<String> categories = ['용돈', '장학금', '지원금', '기타(직접입력)'];
+  String? selectedType;
+  final List<String> types = ['용돈', '장학금', '지원금', '기타(직접입력)'];
   final TextEditingController _contentController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
   List<DepositItem> depositItems = [];
@@ -34,7 +47,7 @@ class _DepositState extends State<Deposit> {
   }
 
   void _addDepositItem() {
-    if (selectedCategory == null || 
+    if (selectedType == null || 
         _contentController.text.isEmpty || 
         _amountController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -49,17 +62,70 @@ class _DepositState extends State<Deposit> {
     setState(() {
       depositItems.add(
         DepositItem(
-          category: selectedCategory!,
+          type: selectedType!,
           content: _contentController.text,
           amount: int.parse(_amountController.text.replaceAll(',', '')),
         ),
       );
       
       // 입력 필드 초기화
-      selectedCategory = null;
+      selectedType = null;
       _contentController.clear();
       _amountController.clear();
     });
+  }
+
+  Future<void> _saveToFirebase() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('로그인이 필요합니다.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      final batch = FirebaseFirestore.instance.batch();
+      final planRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('plans')
+          .doc('main');
+
+      final depositRef = planRef.collection('additionalDeposits');
+      int totalDepositAmount = 0;
+
+      for (var item in depositItems) {
+        final newDoc = depositRef.doc();
+        batch.set(newDoc, item.toJson());
+        totalDepositAmount += item.amount;
+      }
+
+      batch.update(planRef, {
+        'currentSavedAmount': FieldValue.increment(totalDepositAmount),
+      });
+
+      await batch.commit();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('입금 내역이 저장되었습니다.'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      Navigator.pushNamed(context, '/amount_change_choice');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('저장 중 오류가 발생했습니다: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
@@ -88,7 +154,7 @@ class _DepositState extends State<Deposit> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: DropdownMenu<String>(
-                initialSelection: selectedCategory,
+                initialSelection: selectedType,
                 hintText: '카테고리 선택',
                 textStyle: const TextStyle(
                   fontSize: 17,
@@ -104,15 +170,15 @@ class _DepositState extends State<Deposit> {
                     ),
                   ),
                 ),
-                dropdownMenuEntries: categories.map(
-                  (category) => DropdownMenuEntry(
-                    value: category,
-                    label: category,
+                dropdownMenuEntries: types.map(
+                  (type) => DropdownMenuEntry(
+                    value: type,
+                    label: type,
                   ),
                 ).toList(),
                 onSelected: (String? newValue) {
                   setState(() {
-                    selectedCategory = newValue;
+                    selectedType = newValue;
                   });
                 },
               ),
@@ -121,8 +187,12 @@ class _DepositState extends State<Deposit> {
             TextField(
               controller: _contentController,
               decoration: InputDecoration(
-                hintText: '내용',
                 filled: true,
+                hintText: '내용',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
             const SizedBox(height: 15),
@@ -133,6 +203,10 @@ class _DepositState extends State<Deposit> {
                 filled: true,
                 hintText: 'ex. 90,000',
                 suffixText: '원',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
             const SizedBox(height: 15),
@@ -146,8 +220,8 @@ class _DepositState extends State<Deposit> {
                   return Card(
                     margin: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
-                      title: Text(item.content),
-                      subtitle: Text(item.category),
+                      title: Text(item.type),
+                      subtitle: Text(item.content),
                       trailing: Text('${item.amount.toString()}원'),
                       leading: IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
@@ -177,9 +251,7 @@ class _DepositState extends State<Deposit> {
               width: double.infinity,
               height: 55,
               child: ElevatedButton(
-                onPressed: depositItems.isEmpty ? null : () {
-                  Navigator.pushNamed(context, '/amount_change_choice');
-                },
+                onPressed: depositItems.isEmpty ? null : _saveToFirebase,
                 child: const Text('다음'),
               ),
             ),
