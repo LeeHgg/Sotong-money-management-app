@@ -209,7 +209,8 @@ class _GetFixedIncomePageState extends State<GetFixedIncomePage> {
                             .doc(uid)
                             .collection('plans')
                             .doc('main')
-                            .set(planInfo.toMap());
+                            .set(planInfo.toMap(), SetOptions(merge: true)); // .set(planInfo.toMap() 만 사용시 기존 doc 덮어쓰기 됨
+
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('플랜이 저장되었습니다!')),
