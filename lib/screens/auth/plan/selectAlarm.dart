@@ -13,6 +13,7 @@ class SelectAlarmPage extends StatefulWidget {
 class _SelectAlarmPageState extends State<SelectAlarmPage> {
   // 여러 개 선택 가능하도록 Set으로 변경
   Set<int> _selectedIndexes = {};
+  bool _isLoading = false;
 
   // 아이콘과 라벨, 시간 리스트
   final List<String> _icons = ['☀️', '🌼', '🌙'];
@@ -32,12 +33,19 @@ class _SelectAlarmPageState extends State<SelectAlarmPage> {
 
   // Firestore에 알람 시간을 저장하는 메서드
   Future<void> _saveAlarmToFirestore(List<String> alarmTimes) async {
+    setState(() {
+      _isLoading = true;
+    });
+
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('로그인이 필요합니다.')),
       );
       print('유저 ID 없음');
+      setState(() {
+        _isLoading = false;
+      });
       return;
     }
 
@@ -54,13 +62,18 @@ class _SelectAlarmPageState extends State<SelectAlarmPage> {
 
       print('알람 시간이 저장되었습니다: $alarmTimes');
 
-      // 다음 화면으로 이동
-      Navigator.of(context).pushReplacementNamed('/SelectAlarm');
+      if (mounted) {
+        Navigator.of(context).pushReplacementNamed('/');
+      }
     } catch (e) {
       print('알람 저장 실패: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('저장 실패: $e')),
       );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -158,37 +171,38 @@ class _SelectAlarmPageState extends State<SelectAlarmPage> {
                 }),
               ),
               SizedBox(height: screenHeight * 0.2),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _selectedIndexes.isNotEmpty
-                      ? () {
-                    List<String> selectedTimes = _selectedIndexes
-                        .map((index) => _times[index])
-                        .toList();
-                    _saveAlarmToFirestore(selectedTimes);
-                  }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _selectedIndexes.isNotEmpty
-                        ? const Color(0xFF007BFF)
-                        : Colors.grey[200],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+              if (_isLoading)
+                const CircularProgressIndicator()
+              else
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: _selectedIndexes.isNotEmpty
+                        ? () {
+                      List<String> selectedTimes = _selectedIndexes
+                          .map((index) => _times[index])
+                          .toList();
+                      _saveAlarmToFirestore(selectedTimes);
+                    }
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _selectedIndexes.isNotEmpty
+                          ? const Color(0xFF007BFF)
+                          : Colors.grey[200],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    '소통 시작하기',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: _selectedIndexes.isNotEmpty
-                          ? Colors.white
-                          : Colors.grey,
+                    child: const Text(
+                      '소통 시작하기',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-              ),
               const Spacer(flex: 3),
             ],
           ),
