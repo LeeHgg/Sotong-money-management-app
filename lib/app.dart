@@ -18,7 +18,7 @@ import 'screens/auth/signUp/getUserInfo.dart';
 import 'screens/auth/signUp/sign_up_success.dart';
 import 'screens/auth/plan/getPlanName.dart';
 import 'screens/auth/plan/getFixedIncome.dart';
-
+import 'screens/auth/plan/selectAlarm.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -27,9 +27,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sotong',
-      initialRoute: '/planGuide',
+      initialRoute: '/login',
       onGenerateRoute: (settings) {
         switch (settings.name) {
+          case '/selectAlarm':
+            return MaterialPageRoute(
+              builder: (context) => const SelectAlarmPage(), // 전달값 없이 생성
+            );
           case '/planGuide':
             return MaterialPageRoute(
               builder: (context) => const PlanGuidePage(), // 전달값 없이 생성
