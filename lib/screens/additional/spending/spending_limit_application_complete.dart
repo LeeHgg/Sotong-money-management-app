@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sotong/screens/additional/deposit/deposit.dart';
+import 'package:sotong/screens/additional/spending/spending.dart';
 
-class LimitApplicationComplete extends StatelessWidget {
-  final List<DepositItem> depositItems;
+class SpendingLimitApplicationComplete extends StatelessWidget {
+  final List<SpendingItem> SpendingItems;
 
-  const LimitApplicationComplete({
+  const SpendingLimitApplicationComplete({
     super.key,
-    required this.depositItems,
+    required this.SpendingItems,
   });
 
   Future<void> _uploadToFirebase(BuildContext context) async {
@@ -24,47 +24,27 @@ class LimitApplicationComplete extends StatelessWidget {
         return;
       }
 
-      // 현재 활성화된 planId를 가져오기 위한 참조
-      final userRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
-      final userDoc = await userRef.get();
-      final String activePlanId = userDoc.data()?['activePlanId'] ?? 'main';
+      final batch = FirebaseFirestore.instance.batch();
+      final planRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('plans')
+          .doc('main');
 
-      // additionalIncome 문서 참조
-      final additionalIncomeRef = userRef
-          .collection('records')
-          .doc(activePlanId)
-          .collection('refData')
-          .doc('additionalIncome');
+      final depositRef = planRef.collection('additionalDeposits');
+      int totalDepositAmount = 0;
 
-      // earnings 맵 생성 및 total 계산
-      Map<String, Map<String, dynamic>> earnings = {};
-      int total = 0;
-
-      for (int i = 0; i < depositItems.length; i++) {
-        final item = depositItems[i];
-        earnings[(i + 1).toString()] = {
-          'amount': item.amount,
-          'note': item.note,
-          'category': item.category,
-          'autoReg': false,
-          'time': item.date,
-          'type': '추가'
-        };
-        total += item.amount;
+      for (var item in SpendingItems) {
+        final newDoc = depositRef.doc();
+        batch.set(newDoc, item.toJson());
+        totalDepositAmount += item.amount;
       }
 
-      // Firestore에 데이터 저장
-      await additionalIncomeRef.set({
-        'total': total,
-        'earnings': earnings,
+      batch.update(planRef, {
+        'currentSavedAmount': FieldValue.increment(totalDepositAmount),
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('입금 내역이 성공적으로 저장되었습니다.'),
-          backgroundColor: Colors.green,
-        ),
-      );
+      await batch.commit();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -112,7 +92,7 @@ class LimitApplicationComplete extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Text(
-              '기존 플랜의 하루 소비한도가\n7,000원에서 8,500원으로 변경되었어요',
+              '기존 플랜의 하루 소비한도가\n8,500원에서 7,000원으로 변경되었어요',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Pretendard',

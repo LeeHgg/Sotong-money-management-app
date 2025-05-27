@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class DepositItem {
+class SpendingItem {
   String category;
   String note;
   String type = '추가';
   int amount;
   DateTime date;
 
-  DepositItem({
+  SpendingItem({
     required this.category,
     required this.note,
     required this.amount,
@@ -27,19 +25,19 @@ class DepositItem {
   }
 }
 
-class Deposit extends StatefulWidget {
-  const Deposit({super.key});
+class Spending extends StatefulWidget {
+  const Spending({super.key});
 
   @override
-  State<Deposit> createState() => _DepositState();
+  State<Spending> createState() => _SpendingState();
 }
 
-class _DepositState extends State<Deposit> {
+class _SpendingState extends State<Spending> {
   String? selectedCategory;
   final List<String> category = ['용돈', '장학금', '지원금', '기타(직접입력)'];
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
-  List<DepositItem> depositItems = [];
+  List<SpendingItem> SpendingItems = [];
 
   @override
   void dispose() {
@@ -62,14 +60,14 @@ class _DepositState extends State<Deposit> {
     }
 
     setState(() {
-      depositItems.add(
-        DepositItem(
+      SpendingItems.add(
+        SpendingItem(
           category: selectedCategory!,
           note: _noteController.text,
           amount: int.parse(_amountController.text.replaceAll(',', '')),
         ),
       );
-
+      
       // 입력 필드 초기화
       selectedCategory = null;
       _noteController.clear();
@@ -87,7 +85,7 @@ class _DepositState extends State<Deposit> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('추가입금'),
+        title: const Text('추가 지출'),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -166,13 +164,13 @@ class _DepositState extends State<Deposit> {
               ),
             ),
             const SizedBox(height: 15),
-
+            
             // 입금 내역 리스트
             Expanded(
               child: ListView.builder(
-                itemCount: depositItems.length,
+                itemCount: SpendingItems.length,
                 itemBuilder: (context, index) {
-                  final item = depositItems[index];
+                  final item = SpendingItems[index];
                   return Card(
                     margin: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
@@ -183,7 +181,7 @@ class _DepositState extends State<Deposit> {
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
                           setState(() {
-                            depositItems.removeAt(index);
+                            SpendingItems.removeAt(index);
                           });
                         },
                       ),
@@ -198,7 +196,7 @@ class _DepositState extends State<Deposit> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: const [
-                  Text('입금내역 추가+'),
+                  Text('소비내역 추가+'),
                 ],
               ),
             ),
@@ -207,18 +205,18 @@ class _DepositState extends State<Deposit> {
               width: double.infinity,
               height: 55,
               child: ElevatedButton(
-                onPressed: depositItems.isEmpty ? null : () {
+                onPressed: SpendingItems.isEmpty ? null : () {
                   Navigator.pushNamed(
                     context,
-                    '/amount_change_choice',
-                    arguments: depositItems,
+                    '/Spendingamount_change_choice',
+                    arguments: SpendingItems,
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: depositItems.isEmpty
+                  backgroundColor: SpendingItems.isEmpty
                       ? const Color(0xFFF4F4F4)
                       : Theme.of(context).primaryColor,
-                  foregroundColor: depositItems.isEmpty
+                  foregroundColor: SpendingItems.isEmpty
                       ? const Color(0xFF9E9E9E)
                       : Colors.white,
                   shape: RoundedRectangleBorder(
@@ -240,4 +238,4 @@ class _DepositState extends State<Deposit> {
       ),
     );
   }
-}
+} 

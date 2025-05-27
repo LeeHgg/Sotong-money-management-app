@@ -12,6 +12,11 @@ import 'package:sotong/screens/additional/additional_choice.dart';
 import 'package:sotong/screens/additional/deposit/amount_change_choice.dart';
 import 'package:sotong/screens/additional/deposit/period_application_complete.dart';
 import 'package:sotong/screens/additional/deposit/limit_application_complete.dart';
+import 'package:sotong/screens/additional/spending/spending.dart';
+import 'package:sotong/screens/additional/spending/spending_amount_change_choice.dart';
+import 'package:sotong/screens/additional/spending/spending_limit_application_complete.dart';
+import 'package:sotong/screens/additional/spending/spending_period_application_complete.dart';
+
 import 'models/VariableExpense_info.dart';
 import 'models/plan_info.dart';
 import 'models/sign_up_info.dart';
@@ -140,7 +145,32 @@ class MyApp extends StatelessWidget {
               );
             }
             return _errorRoute();
-
+          case '/spending':
+            return MaterialPageRoute(builder: (context)=> const Spending(),);
+          case '/spending_amount_change_choice':
+            final args = settings.arguments;
+            if (args is List<SpendingItem>) {
+              return MaterialPageRoute(
+                builder: (context) => SpendingAmountChangeChoice(SpendingItems: args),
+              );
+            }
+            return _errorRoute();
+          case '/spending_period_application_complete':
+            final args = settings.arguments;
+            if (args is List<SpendingItem>) {
+              return MaterialPageRoute(
+                builder: (context) => SpendingPeriodApplicationComplete(SpendingItems: args),
+              );
+            }
+            return _errorRoute();
+          case '/spending_limit_application_complete':
+            final args = settings.arguments;
+            if (args is List<SpendingItem>) {
+              return MaterialPageRoute(
+                builder: (context) => SpendingLimitApplicationComplete(SpendingItems: args),
+              );
+            }
+            return _errorRoute();
           default:
             return null;
         }

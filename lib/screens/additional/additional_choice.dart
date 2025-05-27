@@ -63,7 +63,7 @@ class AdditionalChoice extends StatelessWidget {
             // 두 번째 선택 박스
             GestureDetector(
               onTap: () {
-                // TODO: 지출 추가 로직
+                Navigator.pushNamed(context, '/spending');
               },
               child: Container(
                 width: double.infinity,
